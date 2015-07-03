@@ -4,7 +4,35 @@ from gi.repository import Gtk
 
 class Handler:
     def onDeleteWindow(self, *args):
-        Gtk.main_quit(*args)
+        quit = True
+        if not app.saved:
+            quit = self.askForSave()
+        if quit:
+            Gtk.main_quit(*args)
+
+    def askForSave(self, *args):
+        dialog = Gtk.Dialog("ask for save dialog", app.builder.get_object("window1"), 0,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_YES, Gtk.ResponseType.YES,
+             Gtk.STOCK_NO, Gtk.ResponseType.NO))
+        dialog.get_content_area().add(Gtk.Label("Datei nicht gespeichert. Wollen Sie die datei jetzt speichern?"))
+        dialog.set_default_size(150, 100)
+        dialog.show_all()
+        response = dialog.run()
+        if response == Gtk.ResponseType.YES:
+            self.onSave(*args)
+            dialog.destroy()
+            if app.saved:
+                return True
+            else:
+                return False
+        elif response == Gtk.ResponseType.NO:
+            dialog.destroy()
+            return True
+        else:
+            dialog.destroy()
+            return False
+
 
     def onOpen(self, *args):
         dialog = Gtk.FileChooserDialog("open file", app.builder.get_object("window1"),
@@ -14,6 +42,8 @@ class Handler:
         if response == Gtk.ResponseType.OK:
             with open (dialog.get_filename(), "r") as loadedfile:
                 app.updateEditor("".join(loadedfile.readlines()), dialog.get_filename())
+                app.file = dialog.get_filename()
+                app.saved = True
         dialog.destroy()
 
 
@@ -28,7 +58,7 @@ class Handler:
 
     def onSave(self, *args):
         if app.file == "":
-            self.onSaveAs(args)
+            self.onSaveAs(*args)
             return
         self.save(app.file)
 
@@ -45,6 +75,7 @@ class Handler:
         buffer.delete(*buffer.get_bounds())
         app.file = ""
         app.builder.get_object("window1").set_title("editor")
+        app.saved = True
 
     def onModified(self, *args):
         if app.saved:
@@ -52,7 +83,6 @@ class Handler:
             print("modified")
             title = app.builder.get_object("window1").get_title()
             app.builder.get_object("window1").set_title(title + "*")
-
 
 class Editor:
 
@@ -72,6 +102,7 @@ class Editor:
     def run(self):
         window = self.builder.get_object("window1")
         window.set_title("editor")
+        window.set_default_size(480, 340)
         buffer = app.builder.get_object("textview1").get_buffer()
         buffer.connect("modified-changed", Handler.onModified)
         window.show_all()
