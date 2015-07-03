@@ -49,6 +49,7 @@
                         <property name="label">gtk-save</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="accel_path">s</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="onSave" swapped="no"/>
@@ -174,12 +175,6 @@
                 <property name="left_margin">1</property>
                 <property name="right_margin">3</property>
                 <property name="monospace">True</property>
-                <signal name="backspace" handler="onModified" swapped="no"/>
-                <signal name="cut-clipboard" handler="onModified" swapped="no"/>
-                <signal name="delete-from-cursor" handler="onModified" swapped="no"/>
-                <signal name="insert-at-cursor" handler="onModified" swapped="no"/>
-                <signal name="paste-clipboard" handler="onModified" swapped="no"/>
-                <signal name="preedit-changed" handler="onModified" swapped="no"/>
               </object>
             </child>
           </object>
