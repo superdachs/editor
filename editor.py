@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
+
 
 class Handler:
     def onDeleteWindow(self, *args):
@@ -83,12 +84,25 @@ class Handler:
             title = app.builder.get_object("window1").get_title()
             app.builder.get_object("window1").set_title(title + "*")
 
+    def onCopy(self, *args):
+        buffer = app.builder.get_object("textview1").get_buffer()
+        buffer.copy_clipboard(app.clipboard)
+
+    def onCut(self, *args):
+        buffer = app.builder.get_object("textview1").get_buffer()
+        buffer.cut_clipboard(app.clipboard, True)
+
+    def onPaste(self, *args):
+        buffer = app.builder.get_object("textview1").get_buffer()
+        buffer.paste_clipboard(app.clipboard, None, True)
+
 class Editor:
 
     file = ""
 
     def __init__(self):
         self.builder = Gtk.Builder()
+        self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         self.builder.add_from_file("editor.glade")
         self.builder.connect_signals(Handler())
 
