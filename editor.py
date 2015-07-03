@@ -5,7 +5,7 @@ from gi.repository import Gtk
 class Handler:
     def onDeleteWindow(self, *args):
         quit = True
-        if not app.saved:
+        if app.builder.get_object("textview1").get_buffer().get_modified():
             quit = self.askForSave()
         if quit:
             Gtk.main_quit(*args)
@@ -22,7 +22,7 @@ class Handler:
         if response == Gtk.ResponseType.YES:
             self.onSave(*args)
             dialog.destroy()
-            if app.saved:
+            if not app.builder.get_object("textview1").get_buffer().get_modified():
                 return True
             else:
                 return False
@@ -43,7 +43,7 @@ class Handler:
             with open (dialog.get_filename(), "r") as loadedfile:
                 app.updateEditor("".join(loadedfile.readlines()), dialog.get_filename())
                 app.file = dialog.get_filename()
-                app.saved = True
+                app.builder.get_object("textview1").get_buffer().set_modified(False)
         dialog.destroy()
 
 
@@ -67,7 +67,7 @@ class Handler:
             buffer = app.builder.get_object("textview1").get_buffer()
             loadedfile.write(buffer.get_text(*buffer.get_bounds(), include_hidden_chars=True))
             app.file = filename
-            app.saved = True
+            buffer.set_modified(False)
             window = app.builder.get_object("window1").set_title(filename)
 
     def onNew(self, *args):
@@ -75,11 +75,10 @@ class Handler:
         buffer.delete(*buffer.get_bounds())
         app.file = ""
         app.builder.get_object("window1").set_title("editor")
-        app.saved = True
+        buffer.set_modified(False)
 
     def onModified(self, *args):
-        if app.saved:
-            app.saved = False
+        if app.builder.get_object("textview1").get_buffer().get_modified():
             print("modified")
             title = app.builder.get_object("window1").get_title()
             app.builder.get_object("window1").set_title(title + "*")
@@ -87,7 +86,6 @@ class Handler:
 class Editor:
 
     file = ""
-    saved = True
 
     def __init__(self):
         self.builder = Gtk.Builder()
