@@ -161,20 +161,27 @@
           </packing>
         </child>
         <child>
-          <object class="GtkTextView" id="textview1">
+          <object class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="pixels_above_lines">1</property>
-            <property name="pixels_below_lines">1</property>
-            <property name="left_margin">1</property>
-            <property name="right_margin">3</property>
-            <property name="monospace">True</property>
-            <signal name="backspace" handler="onModified" swapped="no"/>
-            <signal name="cut-clipboard" handler="onModified" swapped="no"/>
-            <signal name="delete-from-cursor" handler="onModified" swapped="no"/>
-            <signal name="insert-at-cursor" handler="onModified" swapped="no"/>
-            <signal name="paste-clipboard" handler="onModified" swapped="no"/>
-            <signal name="preedit-changed" handler="onModified" swapped="no"/>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkTextView" id="textview1">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="pixels_above_lines">1</property>
+                <property name="pixels_below_lines">1</property>
+                <property name="left_margin">1</property>
+                <property name="right_margin">3</property>
+                <property name="monospace">True</property>
+                <signal name="backspace" handler="onModified" swapped="no"/>
+                <signal name="cut-clipboard" handler="onModified" swapped="no"/>
+                <signal name="delete-from-cursor" handler="onModified" swapped="no"/>
+                <signal name="insert-at-cursor" handler="onModified" swapped="no"/>
+                <signal name="paste-clipboard" handler="onModified" swapped="no"/>
+                <signal name="preedit-changed" handler="onModified" swapped="no"/>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
