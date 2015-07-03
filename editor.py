@@ -96,6 +96,15 @@ class Handler:
         buffer = app.builder.get_object("textview1").get_buffer()
         buffer.paste_clipboard(app.clipboard, None, True)
 
+    def onInfo(self, *args):
+        print("info")
+        dialog = app.builder.get_object("window2")
+        dialog.set_title("info")
+        dialog.show_all()
+
+    def onInfoOk(sel, *args):
+        app.builder.get_object("window2").hide()
+
 class Editor:
 
     file = ""
