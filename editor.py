@@ -2,7 +2,6 @@
 
 from gi.repository import Gtk, Gdk
 
-
 class Handler:
     def onDeleteWindow(self, *args):
         quit = True
@@ -33,7 +32,6 @@ class Handler:
         else:
             dialog.destroy()
             return False
-
 
     def onOpen(self, *args):
         dialog = Gtk.FileChooserDialog("open file", app.builder.get_object("window1"),
@@ -79,8 +77,8 @@ class Handler:
         buffer.set_modified(False)
 
     def onModified(self, *args):
-        if app.builder.get_object("textview1").get_buffer().get_modified():
-            print("modified")
+        buffer = app.builder.get_object("textview1").get_buffer()
+        if buffer.get_modified():
             title = app.builder.get_object("window1").get_title()
             app.builder.get_object("window1").set_title(title + "*")
 
@@ -97,7 +95,6 @@ class Handler:
         buffer.paste_clipboard(app.clipboard, None, True)
 
     def onInfo(self, *args):
-        print("info")
         dialog = app.builder.get_object("window2")
         dialog.set_title("info")
         dialog.show_all()
