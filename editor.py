@@ -120,7 +120,7 @@ class Editor:
     def run(self):
         window = self.builder.get_object("window1")
         window.set_title("editor")
-        window.set_default_size(480, 340)
+        window.set_default_size(640, 480)
         buffer = app.builder.get_object("textview1").get_buffer()
         buffer.connect("modified-changed", Handler.onModified)
         window.show_all()
