@@ -99,8 +99,14 @@ class Handler:
         dialog.set_title("info")
         dialog.show_all()
 
-    def onInfoOk(sel, *args):
+    def onInfoOk(self, *args):
         app.builder.get_object("window2").hide()
+
+    def onFullscreen(self, *args):
+        app.builder.get_object("window1").fullscreen()
+
+    def onWindow(self, *args):
+        app.builder.get_object("window1").unfullscreen()
 
 class Editor:
 
